@@ -37,6 +37,15 @@ const openAccordion = (index) => {
   }
 };
 
+const collapseAccordion = (open) => {
+  let items = document.querySelectorAll(".k-accordion-content");
+  for (var i = 0; i < items.length; i++) {
+    open
+      ? items[i].classList.add("k-accordion-show")
+      : items[i].classList.remove("k-accordion-show");
+  }
+};
+
 function App() {
   const [multi, setMulti] = useState(false);
   const [label, setLabel] = useState("");
@@ -70,7 +79,11 @@ function App() {
         ))}
       </div>
       <hr></hr>
-      <h2>Options:</h2>
+      <div className="row">
+        <h2>Options:</h2>
+        <button onClick={() => collapseAccordion(true)}>Open All</button>
+        <button onClick={() => collapseAccordion(false)}>Close All</button>
+      </div>
       <div className="row">
         <div>
           <input
