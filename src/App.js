@@ -22,7 +22,7 @@ const data = [
     label: "Section Tree",
     content: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab
       accusantium atque consequuntur cupiditate distinctio fugit
-      inventore ipsum mollitia quisquam rem! Aspernatur cumque delectus
+      inventore ipsum mollitia <strong>content: </strong> rem! Aspernatur cumque delectus
       eaque explicabo laboriosam molestias rem reprehenderit tempore!
       Lorem ipsum dolor sit amet, consectetur adipisicing elit.`,
   },
@@ -73,7 +73,7 @@ function App() {
               <i className="k-icon-arrow-down-bold k-icon-strokes icon-open-accordion"></i>
             </button>
             <div id={"item" + i} className="k-accordion-content">
-              <p>{item.content}</p>
+              <div dangerouslySetInnerHTML={{ __html: item.content }}></div>
             </div>
           </div>
         ))}
