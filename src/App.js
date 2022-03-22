@@ -1,14 +1,20 @@
 import React, { useState } from "react";
-import "./App.css";
+import { Container, Row, Col, Form, Tab, Tabs } from "react-bootstrap";
+import Accordion from "./components/Accordion";
 
 const data = [
   {
     label: "Section One",
     content: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab
-      accusantium atque consequuntur cupiditate distinctio fugit
-      inventore ipsum mollitia quisquam rem! Aspernatur cumque delectus
-      eaque explicabo laboriosam molestias rem reprehenderit tempore!
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit.`,
+    accusantium atque consequuntur cupiditate distinctio fugit
+    inventore ipsum mollitia quisquam rem! Aspernatur cumque delectus
+    eaque explicabo laboriosam molestias rem reprehenderit tempore!
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab
+    accusantium atque consequuntur cupiditate distinctio fugit
+    inventore ipsum mollitia quisquam rem! Aspernatur cumque delectus
+    eaque explicabo laboriosam molestias rem reprehenderit tempore!
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit.`,
   },
   {
     label: "Section Two",
@@ -28,94 +34,110 @@ const data = [
   },
 ];
 
-const openAccordion = (index) => {
-  let items = document.querySelectorAll(".k-accordion-content");
-  for (var i = 0; i < items.length; i++) {
-    index === i
-      ? items[i].classList.toggle("k-accordion-show")
-      : items[i].classList.remove("k-accordion-show");
-  }
-};
-
-const collapseAccordion = (open) => {
-  let items = document.querySelectorAll(".k-accordion-content");
-  for (var i = 0; i < items.length; i++) {
-    open
-      ? items[i].classList.add("k-accordion-show")
-      : items[i].classList.remove("k-accordion-show");
-  }
-};
-
 function App() {
-  const [multi, setMulti] = useState(false);
+  const [expandable, setExpandable] = useState(false);
+  const [width, setWidth] = useState(100);
+  const [innerMargin, setInnerMargin] = useState(18);
+  const [innerScroll, setInnerScroll] = useState(false);
+  const [bgColor, setBgColor] = useState("#FFFFFF");
+  const [textColor, setTextColor] = useState("#CCCCCC");
+
   const [label, setLabel] = useState("");
   const [content, setContent] = useState("");
   const [sections, setSections] = useState(data);
 
   return (
     <>
-      <div className="k-accordion">
-        {sections.map((item, i) => (
-          <div key={i} className="k-accordion-wrapper">
-            <button
-              onClick={({ target }) => {
-                target.classList.toggle("k-accordion-open");
-                // if multiple
-                !multi
-                  ? openAccordion(i)
-                  : target.parentElement.childNodes[1].classList.toggle(
-                      "k-accordion-show"
-                    );
-              }}
-              className="k-accordion-button"
-            >
-              <div className="k-accordion-label">Section {item.label}</div>
-              <i className="k-icon-arrow-down-bold k-icon-strokes icon-open-accordion"></i>
-            </button>
-            <div id={"item" + i} className="k-accordion-content">
-              <div dangerouslySetInnerHTML={{ __html: item.content }}></div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <hr></hr>
-      <div className="row">
-        <h2>Options:</h2>
-        <button onClick={() => collapseAccordion(true)}>Open All</button>
-        <button onClick={() => collapseAccordion(false)}>Close All</button>
-      </div>
-      <div className="row">
-        <div>
-          <input
-            id="multi"
-            type="checkbox"
-            checked={multi}
-            onChange={({ target }) => setMulti(target.checked)}
-          />
-          <label htmlFor="multi">Multiple - {multi ? "Yes" : "No"}</label>
-        </div>
-        <input
-          onChange={({ target }) => setLabel(target.value)}
-          value={label}
-          placeholder="label"
-        />
-        <textarea
-          onChange={({ target }) => setContent(target.value)}
-          value={content}
-          placeholder="content"
-        ></textarea>
-        <button
-          onClick={() => {
-            const newSections = sections.concat({ label, content });
-            setSections(newSections);
-            setLabel("");
-            setContent("");
-          }}
-          disabled={content === "" || label === ""}
-        >
-          Add Section
-        </button>
-      </div>
+      <Container fluid>
+        <Row>
+          <Col>
+            <Accordion
+              width={width}
+              bgColor={bgColor}
+              innerMargin={innerMargin}
+              textColor={textColor}
+              innerScroll={innerScroll}
+              multi={expandable}
+              sections={sections}
+            />
+          </Col>
+          <Col md={4}>
+            <Tabs defaultActiveKey="options" className="my-3">
+              <Tab eventKey="options" title="Options">
+                <h2>Options:</h2>
+                <Form.Label>Width: {width}%</Form.Label>
+                <Form.Range
+                  value={width}
+                  onChange={({ target }) => setWidth(target.value)}
+                />
+                <Form.Label>innerMargin: {innerMargin}px</Form.Label>
+                <Form.Control
+                  min="0"
+                  max="80"
+                  value={innerMargin}
+                  type="number"
+                  onChange={({ target }) => setInnerMargin(target.value)}
+                />
+                <Form.Check
+                  className="py-2"
+                  type="switch"
+                  value={innerScroll}
+                  onChange={({ target }) => setInnerScroll(target.checked)}
+                  label={"innerScroll - " + innerScroll}
+                />
+                <Row className="my-2">
+                  <Col md="auto">
+                    <Form.Control
+                      type="color"
+                      value={bgColor}
+                      onChange={({ target }) => setBgColor(target.value)}
+                      title="bgColor"
+                    />
+                  </Col>
+                  <Col>
+                    <Form.Label>bgColor: {bgColor}</Form.Label>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md="auto">
+                    <Form.Control
+                      type="color"
+                      value={textColor}
+                      onChange={({ target }) => setTextColor(target.value)}
+                      title="textColor"
+                    />
+                  </Col>
+                  <Col>
+                    <Form.Label>textColor: {textColor}</Form.Label>
+                  </Col>
+                </Row>
+              </Tab>
+              <Tab eventKey="code" title="Code">
+                <div className="bg-dark text-white p-2">
+                  <pre>
+                    <code>
+                      {`<Accordion`} <br />
+                      {`  width={ ${width} }`} <br />
+                      {`  innerMargin={ ${innerMargin} }`} <br />
+                      {`  innerScroll={ ${innerScroll} }`} <br />
+                      {`  sections={ JSON }`} <br />
+                      {`  bgColor={ ${bgColor} }`} <br />
+                      {`  textColor={ ${textColor} }`} <br />
+                      {`  startBy={ 0 }`} <br />
+                      {`></Accordion>`} <br />
+                    </code>
+                  </pre>
+                </div>
+              </Tab>
+              <Tab eventKey="json" title="JSON">
+                <div style={{backgroundColor: "#001f3f"}}>
+                  <code>{JSON.stringify(sections)}</code>
+                </div>
+              </Tab>
+            </Tabs>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }
