@@ -1,13 +1,30 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 function Accordion(props) {
   const accordion = useRef(null);
-  const { expandable, sections, width, textColor, bgColor, innerMargin } = props;
+  const {
+    expandable,
+    sections,
+    width,
+    textColor,
+    bgColor,
+    innerMargin,
+    startBy,
+    openAll,
+  } = props;
 
-  const openAccordion = ({ target }) => {
-    //if (!multi) collapseAll(false);
-    target.classList.toggle("k-accordion-open");
-    const content = target.parentElement.children[1];
+  const [active, setActive] = useState(startBy);
+
+  useEffect(() => () => collapseAll(!openAll), [openAll]);
+  useEffect(() => () => openAccordion(startBy), [startBy]);
+
+  const openAccordion = (i) => {
+    if (!expandable && active !== i) collapseAll(false);
+    setActive(i);
+    let items = accordion.current.children;
+    const button = items[i].children[0];
+    const content = items[i].children[1];
+    button.classList.toggle("k-accordion-open");
     content.style.maxHeight =
       content.style.maxHeight !== "0px"
         ? "0px"
@@ -42,8 +59,8 @@ function Accordion(props) {
           style={{ margin: innerMargin + "px 0px" }}
         >
           <button
-            onClick={openAccordion}
-            className="k-accordion-button"
+            onClick={() => openAccordion(i)}
+            className={"k-accordion-button"}
             style={{
               color: textColor,
               backgroundColor: bgColor,
@@ -60,15 +77,5 @@ function Accordion(props) {
     </div>
   );
 }
-
-Accordion.defaultProps = {
-  expandable: false,
-  sections: [],
-  width: 100,
-  innerMargin: 18,
-  innerScroll: false,
-  bgColor: "#FFFFFF",
-  textColor: "#CCCCCC",
-};
 
 export default Accordion;
