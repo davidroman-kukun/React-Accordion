@@ -9,6 +9,7 @@ function Accordion(props) {
     textColor,
     bgColor,
     innerMargin,
+    autoScroll,
     startBy,
     openAll,
   } = props;
@@ -29,6 +30,7 @@ function Accordion(props) {
       content.style.maxHeight !== "0px"
         ? "0px"
         : content.children[0].clientHeight + "px";
+    if (autoScroll && expandable) accordion.current.children[i].scrollIntoView();
   };
 
   const collapseAll = (open) => {

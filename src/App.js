@@ -42,6 +42,7 @@ function App() {
   const [expandable, setExpandable] = useState(false);
   const [width, setWidth] = useState(100);
   const [innerMargin, setInnerMargin] = useState(18);
+  const [autoScroll, setAutoScroll] = useState(true);
   const [openAll, setOpenAll] = useState(false);
   const [bgColor, setBgColor] = useState("#FFFFFF");
   const [textColor, setTextColor] = useState("#CCCCCC");
@@ -60,6 +61,7 @@ function App() {
               expandable={expandable}
               width={width}
               innerMargin={innerMargin}
+              autoScroll={autoScroll}
               openAll={openAll}
               bgColor={bgColor}
               textColor={textColor}
@@ -104,6 +106,17 @@ function App() {
                       value={innerMargin}
                       type="number"
                       onChange={({ target }) => setInnerMargin(target.value)}
+                    />
+                  </Col>
+                </Row>
+                <Row className="my-2">
+                  <Col>
+                    <Form.Check
+                      className="py-2"
+                      type="switch"
+                      checked={autoScroll}
+                      onChange={({ target }) => setAutoScroll(target.checked)}
+                      label={"autoScroll - " + autoScroll}
                     />
                   </Col>
                 </Row>
